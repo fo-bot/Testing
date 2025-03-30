@@ -1,0 +1,1 @@
+Please write what the schematics for the database are here, sorta like a UML diagram just write down what the tables and their attributes are, also keys
