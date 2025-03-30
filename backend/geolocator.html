@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>HTML Geolocation</h1>
+
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Click here to scan location</button>
+<!--this displays the user location-->
+<div id="demo"></div>
+
+<script>
+
+
+//get their location from built int HTML/JS geolocator
+const x = document.getElementById("demo");
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(sendLocation);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+//update user location and send it to our local server
+function sendLocation(position) {
+  let latitude = position.coords.latitude;
+  let longitude = position.coords.longitude;
+  x.innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+  fetch('http://localhost:8080/restaurantProject/LocalServer', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({latitude: latitude, longitude: longitude})
+  })
+    //converts the data into a string, Logs response and catches errors
+    .then(response => response.text())
+    .then(data=> console.log("Server Response: ", data))
+    .catch(error => console.error("Error Message: ", error));
+}
+</script>
+
+</body>
+</html>
