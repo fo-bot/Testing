@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search History - Restaurant Roulette</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html"><h1>Restaurant Roulette</h1></a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div class="auth-buttons"></div>
+    </nav>
+  </header>
+
+  <main class="history-container" style="padding: 2rem; max-width: 800px; margin: auto;">
+    <h2 style="margin-bottom: 1.5rem;">Your Search History</h2>
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+      <button id="clear-history" class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i> Clear History
+      </button>
+    </div> 
+    <div id="history-list"></div>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Restaurant Roulette. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const historyList = document.getElementById('history-list');
+
+      if (!currentUser || !currentUser.isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const history = currentUser.searchHistory || [];
+
+      if (history.length === 0) {
+        historyList.innerHTML = "<p>You haven't searched for any restaurants yet.</p>";
+        return;
+      }
+
+      history.reverse().forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'history-entry';
+        div.style = "background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);";
+
+        div.innerHTML = `
+          <h3>${item.name}</h3>
+          <p><strong>Address:</strong> ${item.address}</p>
+          <p><strong>Cuisine:</strong> ${item.cuisine}</p>
+          <p><strong>Price:</strong> ${'$'.repeat(item.price)}</p>
+          <p><strong>Rating:</strong> ${item.rating} ★</p>
+          <p><small><i class="fas fa-clock"></i> ${new Date(item.timestamp).toLocaleString()}</small></p>
+        `;
+        historyList.appendChild(div);
+      });
+
+      // Clear history button functionality
+      const clearBtn = document.getElementById('clear-history');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to clear your search history?')) {
+            currentUser.searchHistory = [];
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            location.reload(); // Refresh to update UI
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

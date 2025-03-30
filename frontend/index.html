@@ -1,1 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGYZDBalEh2oeJP6SnU6mffWQNj4FPDt0&libraries=places&loading=async" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Roulette</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="address-autocomplete.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Restaurant Roulette</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html"><button class="btn btn-login">Login</button></a>
+                <a href="signup.html"><button class="btn btn-signup">Sign Up</button></a>
+            </div>
+        </nav>
+    </header>
 
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Can't Decide Where to Eat?</h1>
+                <p>Let us pick a restaurant for you based on your preferences!</p>
+                <div class="search-container">
+                    <input type="text" placeholder="Enter your location..." class="location-input">
+                    <button class="btn btn-location"><i class="fas fa-map-marker-alt"></i> Get Location</button>
+                    <button class="btn btn-primary">Find A Restaurant</button>
+                </div>
+                <div class="quick-filters">
+                    <span class="filter" data-filter-type="cuisine"><i class="fas fa-utensils"></i> Cuisine</span>
+                    <span class="filter" data-filter-type="price"><i class="fas fa-dollar-sign"></i> Price</span>
+                    <span class="filter" data-filter-type="distance"><i class="fas fa-map-marker-alt"></i> Distance</span>
+                    <span class="filter" data-filter-type="rating"><i class="fas fa-star"></i> Rating</span>
+                </div>
+                <div class="filter-instructions">
+                    <small>Click on filters to select your preferences</small>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://placehold.co/600x400" alt="Food selection">
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>How It Works</h2>
+            <div class="features-container">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Set Your Location</h3>
+                    <p>Enter your current location or allow us to use your GPS coordinates.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Choose Your Preferences</h3>
+                    <p>Filter by cuisine, price range, distance, and ratings.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-random"></i>
+                    </div>
+                    <h3>Get a Random Pick</h3>
+                    <p>Let our algorithm select a restaurant that matches your criteria.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Enjoy Your Meal</h3>
+                    <p>View restaurant details, directions, and even make reservations.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials">
+            <h2>User Testimonials</h2>
+            <div class="testimonial-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"This app saved my relationship! No more arguing about where to eat."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://placehold.co/100" alt="User avatar">
+                        <div>
+                            <h4>Sarah J.</h4>
+                            <span>Food Enthusiast</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"I discovered my new favorite restaurant thanks to Restaurant Roulette!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://placehold.co/100" alt="User avatar">
+                        <div>
+                            <h4>Mike T.</h4>
+                            <span>Foodie Explorer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Perfect for when I'm traveling and don't know the local food scene."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://placehold.co/100" alt="User avatar">
+                        <div>
+                            <h4>Aisha K.</h4>
+                            <span>Travel Blogger</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta">
+            <div class="cta-content">
+                <h2>Ready to Discover Your Next Favorite Restaurant?</h2>
+                <p>Create an account today and start exploring!</p>
+                <button class="btn btn-cta">Get Started</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Restaurant Roulette</h3>
+                <p>Helping indecisive food lovers find their next meal since 2025.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Restaurant Roulette. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="location.js"></script>
+    <script src="restaurant-finder.js"></script>
+</body>
+</html>

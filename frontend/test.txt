@@ -1,0 +1,561 @@
+// Restaurant finder implementation using real API
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the "Find A Restaurant" button
+    const findRestaurantBtn = document.querySelector('.search-container .btn-primary');
+    
+    if (findRestaurantBtn) {
+        findRestaurantBtn.addEventListener('click', findRandomRestaurant);
+    }
+    
+    // Function to handle finding a random restaurant
+    function findRandomRestaurant() {
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            // Show modal or redirect to login page
+            if (confirm('Please log in or sign up to use this feature. Would you like to go to the login page?')) {
+                window.location.href = 'login.html';
+            }
+            return;
+        }
+        
+        // 1. Collect user's location
+        const locationInput = document.querySelector('.location-input');
+        if (!locationInput || locationInput.value.trim() === '') {
+            alert('Please enter your location');
+            locationInput.focus();
+            return;
+        }
+        
+        const location = locationInput.value.trim();
+        
+        // 2. Collect selected filters
+        const filters = collectFilters();
+        
+        // Log for debugging
+        console.log('Search parameters:', { location, filters });
+        
+        // 3. Show loading state
+        showLoadingState();
+        
+        // 4. Call API to find restaurants
+        fetchRestaurantFromAPI(location, filters)
+            .then(restaurant => {
+                // 5. Display the selected restaurant
+                if (restaurant) {
+                    displayRestaurant(restaurant);
+                } else {
+                    showError('No restaurants found that match your criteria. Try adjusting your filters.');
+                }
+            })
+            .catch(error => {
+                console.error('Error finding restaurant:', error);
+                hideLoadingState();
+                showError('Unable to find a restaurant. Please try again.');
+            });
+    }
+    
+    // Improved filter collection with better selectors
+    function collectFilters() {
+        const filters = {
+            cuisineType: null,
+            priceRange: null,
+            distance: null,
+            rating: null
+        };
+        
+        // Get all filters
+        const filterElements = document.querySelectorAll('.filter');
+        
+        // Iterate through all filters and extract values
+        filterElements.forEach(filter => {
+            const filterText = filter.textContent.trim();
+            
+            if (filterText.includes('Cuisine:')) {
+                filters.cuisineType = filterText.split('Cuisine:')[1].trim();
+                console.log('Found cuisine filter:', filters.cuisineType);
+            }
+            else if (filterText.includes('Price:')) {
+                filters.priceRange = filterText.split('Price:')[1].trim();
+                console.log('Found price filter:', filters.priceRange);
+            }
+            else if (filterText.includes('Distance:')) {
+                const distanceText = filterText.split('Distance:')[1].trim();
+                filters.distance = parseDistanceToMeters(distanceText);
+                console.log('Found distance filter:', distanceText, '→', filters.distance, 'meters');
+            }
+            else if (filterText.includes('Rating:')) {
+                const ratingText = filterText.split('Rating:')[1].trim();
+                filters.rating = parseRating(ratingText);
+                console.log('Found rating filter:', ratingText, '→', filters.rating);
+            }
+        });
+        
+        // Get user preferences if available
+        const userData = JSON.parse(localStorage.getItem('currentUser'));
+        if (userData && userData.preferences) {
+            // Apply user preferences for any filters not explicitly set
+            if (!filters.cuisineType && userData.preferences.cuisines && userData.preferences.cuisines.length > 0) {
+                filters.cuisinesToInclude = userData.preferences.cuisines;
+                console.log('Using cuisine preferences:', filters.cuisinesToInclude);
+            }
+            
+            if (!filters.priceRange && userData.preferences.priceRange && userData.preferences.priceRange.length > 0) {
+                filters.priceRangeArray = userData.preferences.priceRange;
+                console.log('Using price preferences:', filters.priceRangeArray);
+            }
+            
+            if (!filters.distance && userData.preferences.radius) {
+                filters.distance = parseInt(userData.preferences.radius) * 1609; // Convert miles to meters
+                console.log('Using distance preference:', userData.preferences.radius, 'miles →', filters.distance, 'meters');
+            }
+            
+            if (!filters.rating && userData.preferences.minRating) {
+                filters.rating = parseFloat(userData.preferences.minRating);
+                console.log('Using rating preference:', filters.rating);
+            }
+        }
+        
+        return filters;
+    }
+    
+    // Improved distance parsing
+    function parseDistanceToMeters(distanceText) {
+        console.log("Parsing distance:", distanceText); // Debug log
+        
+        // Handle "X miles" format
+        if (distanceText.includes('mile')) {
+            // Use regex to extract the number part
+            const milesRegex = /(\d+(?:\.\d+)?)/;
+            const match = distanceText.match(milesRegex);
+            
+            if (match && match[1]) {
+                const milesValue = parseFloat(match[1]);
+                if (!isNaN(milesValue)) {
+                    return milesValue * 1609; // Convert miles to meters
+                }
+            }
+        }
+        
+        // Default to 5km if parsing fails
+        return 5000; 
+    }
+    
+    // Parse rating text to numeric value
+    function parseRating(ratingText) {
+        // Count stars
+        const starCount = (ratingText.match(/★/g) || []).length;
+        
+        // Try to parse "X & up" format
+        if (ratingText.includes('& up')) {
+            const starCountText = ratingText.split('&')[0].trim();
+            const starCount = (starCountText.match(/★/g) || []).length;
+            return starCount;
+        }
+        
+        // If stars were found, return the count
+        if (starCount > 0) {
+            return starCount;
+        }
+        
+        // Try to parse numeric value
+        const numericMatch = ratingText.match(/(\d+(?:\.\d+)?)/);
+        if (numericMatch && numericMatch[1]) {
+            return parseFloat(numericMatch[1]);
+        }
+        
+        return 0; // Default to no rating filter
+    }
+    
+    // Show loading state
+    function showLoadingState() {
+        // Create a loading overlay if it doesn't exist
+        if (!document.getElementById('loading-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.id = 'loading-overlay';
+            overlay.innerHTML = `
+                <div class="loading-spinner">
+                    <i class="fas fa-utensils fa-spin"></i>
+                    <p>Finding your perfect restaurant...</p>
+                </div>
+            `;
+            
+            // Add styles
+            const style = document.createElement('style');
+            style.textContent = `
+                #loading-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.7);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                }
+                .loading-spinner {
+                    background-color: white;
+                    padding: 2rem;
+                    border-radius: 10px;
+                    text-align: center;
+                }
+                .loading-spinner i {
+                    font-size: 3rem;
+                    color: var(--primary-color);
+                    margin-bottom: 1rem;
+                    display: block;
+                }
+                .fa-spin {
+                    animation: fa-spin 2s infinite linear;
+                }
+                @keyframes fa-spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            document.body.appendChild(overlay);
+        } else {
+            document.getElementById('loading-overlay').style.display = 'flex';
+        }
+    }
+    
+    // Hide loading state
+    function hideLoadingState() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+    }
+    
+    // Show error message
+    function showError(message) {
+        hideLoadingState();
+        
+        // Create error toast
+        const toast = document.createElement('div');
+        toast.className = 'error-toast';
+        toast.textContent = message;
+        
+        // Add styles if not already present
+        if (!document.getElementById('toast-styles')) {
+            const style = document.createElement('style');
+            style.id = 'toast-styles';
+            style.textContent = `
+                .error-toast {
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: var(--danger-color);
+                    color: white;
+                    padding: 1rem;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    text-align: center;
+                    max-width: 300px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }
+                
+                .success-toast {
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: var(--success-color);
+                    color: white;
+                    padding: 1rem;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    text-align: center;
+                    max-width: 300px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        document.body.appendChild(toast);
+        
+        // Remove toast after 5 seconds
+        setTimeout(() => {
+            if (document.body.contains(toast)) {
+                document.body.removeChild(toast);
+            }
+        }, 5000);
+    }
+    
+    // Fetch restaurant from API
+    async function fetchRestaurantFromAPI(location, filters) {
+        try {
+            // Check if API interface is available
+            if (typeof window.restaurantAPI === 'undefined') {
+                // Import the API interface dynamically if not available globally
+                await import('./api-interface.js').then(module => {
+                    window.restaurantAPI = module.default;
+                }).catch(err => {
+                    console.error('Failed to import API interface:', err);
+                    throw new Error('API interface module not available');
+                });
+            }
+            
+            // Now use the API to find a restaurant
+            const apiResponse = await window.restaurantAPI.findRandomRestaurant({
+                location,
+                filters
+            });
+            
+            console.log('API Response:', apiResponse);
+            
+            // Format the response to a consistent structure
+            if (apiResponse && (apiResponse.name || apiResponse.displayName)) {
+                return {
+                    name: apiResponse.name || apiResponse.displayName?.text || 'Unknown Restaurant',
+                    address: apiResponse.address || apiResponse.shortFormattedAddress || 'Address not available',
+                    cuisine: apiResponse.cuisine || 
+                            (apiResponse.types && apiResponse.types.length > 0 ? 
+                                beautifyCuisineType(apiResponse.types[0]) : 'Various Cuisine'),
+                    price: apiResponse.priceLevel || 2,
+                    rating: apiResponse.rating || 4.0
+                };
+            } else {
+                console.warn('API returned invalid data structure:', apiResponse);
+                throw new Error('Invalid API response');
+            }
+        } catch (error) {
+            console.error('Error in fetchRestaurantFromAPI:', error);
+            
+            // For testing - create a fallback with a sample restaurant 
+            // Remove this in production
+            console.warn('Falling back to sample data due to API error');
+            return {
+                name: "API Test Restaurant",
+                address: "123 Test Street, Located near " + location,
+                cuisine: filters.cuisineType || "Various Cuisine",
+                price: filters.priceRange ? filters.priceRange.length : 2,
+                rating: filters.rating || 4.5
+            };
+        }
+    }
+    
+    // Helper function to make cuisine types more readable
+    function beautifyCuisineType(cuisineType) {
+        // Handle potential API response formats
+        if (typeof cuisineType !== 'string') return 'Various Cuisine';
+        
+        // Remove any technical prefixes
+        const cleanType = cuisineType
+            .replace(/^cuisine_/, '')
+            .replace(/_restaurant$/, '')
+            .replace(/_/g, ' ');
+        
+        // Capitalize each word
+        return cleanType
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
+    
+    // Display the selected restaurant
+    function displayRestaurant(restaurant) {
+        hideLoadingState();
+        
+        // Create the restaurant result modal
+        const modal = document.createElement('div');
+        modal.className = 'restaurant-modal';
+        modal.innerHTML = `
+            <div class="restaurant-result">
+                <div class="result-header">
+                    <h2>Your Restaurant Pick</h2>
+                    <button class="close-modal"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="restaurant-details">
+                    <div class="restaurant-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>${restaurant.name}</h3>
+                    <p class="restaurant-address">
+                        <i class="fas fa-map-marker-alt"></i> ${restaurant.address}
+                    </p>
+                    <p class="restaurant-cuisine">
+                        <i class="fas fa-concierge-bell"></i> ${restaurant.cuisine}
+                    </p>
+                    <p class="restaurant-price">
+                        ${'$'.repeat(restaurant.price)}
+                    </p>
+                    <p class="restaurant-rating">
+                        ${'★'.repeat(Math.floor(restaurant.rating))}${restaurant.rating % 1 >= 0.5 ? '½' : ''}
+                        <span class="rating-number">${restaurant.rating.toFixed(1)}</span>
+                    </p>
+                    <div class="restaurant-actions">
+                        <button class="btn btn-primary btn-directions">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </button>
+                        <button class="btn btn-secondary btn-try-again">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal styles
+        const modalStyle = document.createElement('style');
+        modalStyle.id = 'restaurant-modal-styles';
+        modalStyle.textContent = `
+            .restaurant-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+            .restaurant-result {
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                width: 90%;
+                max-width: 500px;
+                overflow: hidden;
+                animation: modalFadeIn 0.3s ease forwards;
+            }
+            @keyframes modalFadeIn {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .result-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem;
+                background-color: var(--primary-color);
+                color: white;
+            }
+            .result-header h2 {
+                margin: 0;
+            }
+            .close-modal {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+            }
+            .restaurant-details {
+                padding: 2rem;
+                text-align: center;
+            }
+            .restaurant-icon {
+                width: 80px;
+                height: 80px;
+                background-color: var(--light-color);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1rem;
+            }
+            .restaurant-icon i {
+                font-size: 2.5rem;
+                color: var(--primary-color);
+            }
+            .restaurant-details h3 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+                color: var(--dark-color);
+            }
+            .restaurant-address,
+            .restaurant-cuisine,
+            .restaurant-price,
+            .restaurant-rating {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 0.8rem;
+            }
+            .restaurant-address i,
+            .restaurant-cuisine i,
+            .restaurant-price i {
+                margin-right: 0.5rem;
+                color: var(--gray-color);
+                width: 20px;
+            }
+            .restaurant-rating {
+                color: #ffc107;
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+            .rating-number {
+                margin-left: 0.5rem;
+                color: var(--dark-color);
+                font-size: 1rem;
+            }
+            .restaurant-actions {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+            }
+            .btn-directions,
+            .btn-try-again {
+                display: flex;
+                align-items: center;
+            }
+            .btn-directions i,
+            .btn-try-again i {
+                margin-right: 0.5rem;
+            }
+            
+            @media (max-width: 768px) {
+                .restaurant-result {
+                    width: 95%;
+                }
+                .restaurant-actions {
+                    flex-direction: column;
+                }
+                .btn-directions,
+                .btn-try-again {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+        `;
+        
+        if (!document.getElementById('restaurant-modal-styles')) {
+            document.head.appendChild(modalStyle);
+        }
+        
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        const closeBtn = modal.querySelector('.close-modal');
+        const directionsBtn = modal.querySelector('.btn-directions');
+        const tryAgainBtn = modal.querySelector('.btn-try-again');
+        
+        closeBtn.addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+        
+        directionsBtn.addEventListener('click', () => {
+            // Open Google Maps directions
+            const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(restaurant.address)}`;
+            window.open(mapsUrl, '_blank');
+        });
+        
+        tryAgainBtn.addEventListener('click', () => {
+            document.body.removeChild(modal);
+            findRandomRestaurant();
+        });
+    }
+});

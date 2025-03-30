@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences - Restaurant Roulette</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="preferences.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html"><h1>Restaurant Roulette</h1></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <!-- This will be replaced by JavaScript based on login status -->
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="preferences-container">
+            <div class="preferences-header">
+                <h1>Set Your Restaurant Preferences</h1>
+                <p>Customize your search criteria to find the perfect restaurant</p>
+            </div>
+
+            <div class="preferences-card">
+                <div class="preferences-section">
+                    <h2>Location Settings</h2>
+                    <div class="form-group">
+                        <label for="default-location">Default Location</label>
+                        <div class="location-input-group">
+                            <input type="text" id="default-location" placeholder="Enter your default location">
+                            <button class="btn btn-location" id="use-current-location">
+                                <i class="fas fa-map-marker-alt"></i> Use Current Location
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="search-radius">Search Radius</label>
+                        <div class="range-container">
+                            <input type="range" id="search-radius" min="1" max="25" value="5">
+                            <div class="range-value"><span id="radius-value">5</span> miles</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preferences-section">
+                    <h2>Price Range</h2>
+                    <div class="price-range-selector">
+                        <div class="price-option">
+                            <input type="checkbox" id="price-1" class="price-checkbox" checked>
+                            <label for="price-1" class="price-label">$</label>
+                            <div class="price-description">Inexpensive</div>
+                        </div>
+                        <div class="price-option">
+                            <input type="checkbox" id="price-2" class="price-checkbox" checked>
+                            <label for="price-2" class="price-label">$$</label>
+                            <div class="price-description">Moderate</div>
+                        </div>
+                        <div class="price-option">
+                            <input type="checkbox" id="price-3" class="price-checkbox" checked>
+                            <label for="price-3" class="price-label">$$$</label>
+                            <div class="price-description">Expensive</div>
+                        </div>
+                        <div class="price-option">
+                            <input type="checkbox" id="price-4" class="price-checkbox">
+                            <label for="price-4" class="price-label">$$$$</label>
+                            <div class="price-description">Very Expensive</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preferences-section">
+                    <h2>Cuisine Types</h2>
+                    <div class="search-cuisines">
+                        <input type="text" id="cuisine-search" placeholder="Search cuisines...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="cuisine-container">
+                        <div class="cuisine-grid">
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-italian" checked>
+                                <label for="cuisine-thai">
+                                    <i class="fas fa-seedling"></i>
+                                    <span>Thai</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-mediterranean">
+                                <label for="cuisine-mediterranean">
+                                    <i class="fas fa-leaf"></i>
+                                    <span>Mediterranean</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-french">
+                                <label for="cuisine-french">
+                                    <i class="fas fa-cheese"></i>
+                                    <span>French</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-korean">
+                                <label for="cuisine-korean">
+                                    <i class="fas fa-bowl-food"></i>
+                                    <span>Korean</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-bbq">
+                                <label for="cuisine-bbq">
+                                    <i class="fas fa-bacon"></i>
+                                    <span>BBQ</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-vegan">
+                                <label for="cuisine-vegan">
+                                    <i class="fas fa-carrot"></i>
+                                    <span>Vegan</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preferences-section">
+                    <h2>Minimum Rating</h2>
+                    <div class="rating-selector">
+                        <div class="range-container">
+                            <input type="range" id="min-rating" min="1" max="5" step="0.5" value="3.5">
+                            <div class="range-value"><span id="rating-value">3.5</span> stars</div>
+                        </div>
+                        <div class="rating-display">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preferences-section">
+                    <h2>Additional Filters</h2>
+                    <div class="additional-filters">
+                        <div class="filter-item">
+                            <input type="checkbox" id="filter-open-now">
+                            <label for="filter-open-now">Open Now</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="filter-reservations">
+                            <label for="filter-reservations">Takes Reservations</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="filter-delivery">
+                            <label for="filter-delivery">Offers Delivery</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="filter-takeout">
+                            <label for="filter-takeout">Offers Takeout</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="filter-outdoor">
+                            <label for="filter-outdoor">Outdoor Seating</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preferences-actions">
+                    <button class="btn btn-secondary" id="reset-preferences">Reset to Defaults</button>
+                    <button class="btn btn-primary" id="save-preferences">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Restaurant Roulette</h3>
+                <p>Helping indecisive food lovers find their next meal since 2025.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Restaurant Roulette. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="preferences.js"></script>
+    <script src="location.js"></script>
+</body>
+</html>-italian">
+                                    <i class="fas fa-pizza-slice"></i>
+                                    <span>Italian</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-chinese" checked>
+                                <label for="cuisine-chinese">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Chinese</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-mexican" checked>
+                                <label for="cuisine-mexican">
+                                    <i class="fas fa-pepper-hot"></i>
+                                    <span>Mexican</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-japanese" checked>
+                                <label for="cuisine-japanese">
+                                    <i class="fas fa-fish"></i>
+                                    <span>Japanese</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-american" checked>
+                                <label for="cuisine-american">
+                                    <i class="fas fa-hamburger"></i>
+                                    <span>American</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-indian">
+                                <label for="cuisine-indian">
+                                    <i class="fas fa-mortar-pestle"></i>
+                                    <span>Indian</span>
+                                </label>
+                            </div>
+                            <div class="cuisine-item">
+                                <input type="checkbox" id="cuisine-thai">
+                                <label for="cuisine

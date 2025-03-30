@@ -1,0 +1,308 @@
+/* Preferences Page Styles */
+
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #4ecdc4;
+    --dark-color: #293241;
+    --light-color: #f8f9fa;
+    --gray-color: #6c757d;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+.preferences-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.preferences-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.preferences-header h1 {
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.preferences-header p {
+    color: var(--gray-color);
+}
+
+.preferences-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 2rem;
+}
+
+.preferences-section {
+    margin-bottom: 2.5rem;
+}
+
+.preferences-section:last-child {
+    margin-bottom: 0;
+}
+
+.preferences-section h2 {
+    font-size: 1.3rem;
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* Location Settings */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.location-input-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.location-input-group input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn-location {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+.btn-location:hover {
+    background-color: #e9ecef;
+}
+
+.btn-location i {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+/* Range Input */
+.range-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.range-container input[type="range"] {
+    flex: 1;
+}
+
+.range-value {
+    min-width: 80px;
+    text-align: right;
+    font-weight: 500;
+}
+
+/* Price Range Selector */
+.price-range-selector {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.price-option {
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+}
+
+.price-checkbox {
+    display: none;
+}
+
+.price-label {
+    display: block;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.price-checkbox:checked + .price-label {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.price-description {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--gray-color);
+}
+
+/* Cuisine Types */
+.search-cuisines {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.search-cuisines input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.search-cuisines i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-color);
+}
+
+.cuisine-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.cuisine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.cuisine-item {
+    position: relative;
+}
+
+.cuisine-item input[type="checkbox"] {
+    display: none;
+}
+
+.cuisine-item label {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    background-color: var(--light-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cuisine-item input[type="checkbox"]:checked + label {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.cuisine-item label i {
+    width: 20px;
+    margin-right: 0.8rem;
+    text-align: center;
+}
+
+/* Rating Selector */
+.rating-selector {
+    display: flex;
+    flex-direction: column;
+}
+
+.rating-display {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #ffc107;
+}
+
+/* Additional Filters */
+.additional-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+}
+
+.filter-item input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+/* Action Buttons */
+.preferences-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.btn-secondary {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background-color: #e9ecef;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #ff5252;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .location-input-group {
+        flex-direction: column;
+    }
+    
+    .price-range-selector {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .price-option {
+        flex: none;
+    }
+    
+    .cuisine-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .additional-filters {
+        grid-template-columns: 1fr;
+    }
+    
+    .preferences-actions {
+        flex-direction: column;
+    }
+    
+    .preferences-actions button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Restaurant Roulette</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html"><h1>Restaurant Roulette</h1></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <!-- This will be replaced by JavaScript based on login status -->
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-sidebar-header">
+                    <div class="profile-image">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3 id="user-name">User Name</h3>
+                    <p id="user-email">user@example.com</p>
+                </div>
+                <ul class="profile-menu">
+                    <li class="active" data-tab="profile-details">
+                        <i class="fas fa-user"></i> Profile Details
+                    </li>
+                    <li data-tab="preferences">
+                        <i class="fas fa-sliders-h"></i> Preferences
+                    </li>
+                    <li data-tab="search-history">
+                        <i class="fas fa-history"></i> Search History
+                    </li>
+                    <li data-tab="favorites">
+                        <i class="fas fa-heart"></i> Favorite Restaurants
+                    </li>
+                    <li data-tab="account-settings">
+                        <i class="fas fa-cog"></i> Account Settings
+                    </li>
+                </ul>
+                <button id="logout-button" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            <div class="profile-content">
+                <!-- Profile Details Tab -->
+                <div class="profile-tab active" id="profile-details">
+                    <div class="tab-header">
+                        <h2>Profile Details</h2>
+                        <p>Manage your personal information</p>
+                    </div>
+                    <div class="profile-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-first-name">First Name</label>
+                                <input type="text" id="profile-first-name" placeholder="Your first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-last-name">Last Name</label>
+                                <input type="text" id="profile-last-name" placeholder="Your last name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-new-password">Confirm New Password</label>
+                            <input type="password" id="confirm-new-password" placeholder="Confirm new password">
+                        </div>
+                        <div class="account-actions">
+                            <button class="btn btn-primary" id="change-password">Update Password</button>
+                        </div>
+                        <hr class="settings-divider">
+                        <div class="danger-zone">
+                            <h3>Danger Zone</h3>
+                            <p>These actions are permanent and cannot be undone.</p>
+                            <button class="btn btn-danger" id="delete-account">Delete Account</button>
+                        </div>
+                    </div>
+                </div>="profile-email">Email</label>
+                            <input type="email" id="profile-email" placeholder="Your email" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">Phone Number</label>
+                            <input type="tel" id="profile-phone" placeholder="Your phone number (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-location">Default Location</label>
+                            <input type="text" id="profile-location" placeholder="Your default location">
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" id="save-profile">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences Tab -->
+                <div class="profile-tab" id="preferences">
+                    <div class="tab-header">
+                        <h2>Restaurant Preferences</h2>
+                        <p>Customize your search preferences</p>
+                    </div>
+                    <div class="preferences-form">
+                        <div class="form-group">
+                            <label for="pref-radius">Search Radius</label>
+                            <div class="range-with-value">
+                                <input type="range" id="pref-radius" min="1" max="25" value="5">
+                                <span id="radius-value">5 miles</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Price Range</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="price-1" checked>
+                                    <label for="price-1">$ (Inexpensive)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="price-2" checked>
+                                    <label for="price-2">$$ (Moderate)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="price-3" checked>
+                                    <label for="price-3">$$$ (Expensive)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="price-4">
+                                    <label for="price-4">$$$$ (Very Expensive)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cuisine Preferences</label>
+                            <div class="cuisine-preferences">
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-italian" checked>
+                                    <label for="cuisine-italian">Italian</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-chinese" checked>
+                                    <label for="cuisine-chinese">Chinese</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-mexican" checked>
+                                    <label for="cuisine-mexican">Mexican</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-indian">
+                                    <label for="cuisine-indian">Indian</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-japanese" checked>
+                                    <label for="cuisine-japanese">Japanese</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-thai">
+                                    <label for="cuisine-thai">Thai</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-american" checked>
+                                    <label for="cuisine-american">American</label>
+                                </div>
+                                <div class="cuisine-item">
+                                    <input type="checkbox" id="cuisine-mediterranean">
+                                    <label for="cuisine-mediterranean">Mediterranean</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="min-rating">Minimum Rating</label>
+                            <div class="range-with-value">
+                                <input type="range" id="min-rating" min="1" max="5" step="0.5" value="3.5">
+                                <span id="rating-value">3.5 stars</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" id="save-preferences">Save Preferences</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search History Tab -->
+                <div class="profile-tab" id="search-history">
+                    <div class="tab-header">
+                        <h2>Search History</h2>
+                        <p>View your recent restaurant searches</p>
+                    </div>
+                    <div class="search-history-container">
+                        <div class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <h3>No search history yet</h3>
+                            <p>Your recent restaurant searches will appear here</p>
+                            <a href="index.html" class="btn btn-primary">Find Restaurants</a>
+                        </div>
+                        <!-- Search history items will be added here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Favorites Tab -->
+                <div class="profile-tab" id="favorites">
+                    <div class="tab-header">
+                        <h2>Favorite Restaurants</h2>
+                        <p>Your saved restaurant collection</p>
+                    </div>
+                    <div class="favorites-container">
+                        <div class="empty-state">
+                            <i class="fas fa-heart"></i>
+                            <h3>No favorites yet</h3>
+                            <p>Save restaurants you love to find them easily later</p>
+                            <a href="index.html" class="btn btn-primary">Discover Restaurants</a>
+                        </div>
+                        <!-- Favorite restaurant items will be added here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Account Settings Tab -->
+                <div class="profile-tab" id="account-settings">
+                    <div class="tab-header">
+                        <h2>Account Settings</h2>
+                        <p>Manage your account security</p>
+                    </div>
+                    <div class="account-form">
+                        <div class="form-group">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" placeholder="Enter current password">
+                        </div>
+                        <div class="form-group">
+                            <label for
